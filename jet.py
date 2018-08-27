@@ -12,19 +12,19 @@ def parse_options(
 ):
     parser = argparse.ArgumentParser(description="cli arguments for jetcity")
     parser.add_argument(
-        '--depart', dest='depart', action='store_const',
+        '--depart', dest='depart',
         help='list flights at this date (YYYYMMDD format) [default=NOW + 10 days]',
     )
     parser.add_argument(
-        '--return', dest='return', action='store_const',
-        help='list return flights for those dates (YYYYMMDD format) [default=None]',
+        '--return', dest='return_date',
+        help='list return flights for this date (YYYYMMDD format) [default=None]',
     )
     parser.add_argument(
-        '--from', dest='from_city', action='store_const',
+        '--from', dest='from_city', default='London',
         help='departure city (default: London)',
     )
     parser.add_argument(
-        '--to', dest='to_city', action='store_const',
+        '--to', dest='to_city', default='Amsterdam',
         help='destination city (default: Amsterdam)',
     )
     return parser.parse_args()
@@ -36,7 +36,10 @@ def launch_spider_and_stdout(spider_name, **kwargs):
             shlex.split(
                 'scrapy crawl -o {out_file_name} -t jsonlines --nolog {spider}'.format(
                     spider=spider_name, out_file_name='-'
-                ) + ''.join(' -a {key}={value}'.format(key=key, value=value) for key, value in kwargs)
+                ) + ''.join(
+                    ' -a {key}={value}'.format(key=key, value=value)
+                    for key, value in kwargs.items() if value
+                )
             ),
             stdout=subprocess.PIPE
         )
@@ -48,9 +51,26 @@ def launch_spider_and_stdout(spider_name, **kwargs):
 
 show_flights = lambda date: launch_spider_and_stdout('cityjet', date=date)
 
-# TODO: implement command line option parsing
+
+def request_flights(**kwargs):
+     return launch_spider_and_stdout('cityjet', **kwargs)
+
 
 if __name__ == '__main__':
+    p = parse_options()
     os.chdir(os.path.join(os.path.dirname(__file__), 'cityjet'))
-    output = launch_spider_and_stdout('cityjet')
-    print(output, file=sys.stderr, end='')
+    print(" DEPARTS ".center(80, '='))
+    print(request_flights(**{
+        'depart_date': p.depart,
+        'from_city': p.from_city,
+        'to_city': p.to_city,
+    }), end='')
+    if not p.return_date:
+        sys.exit(0)
+    print(" RETURNS ".center(80, '='))
+    print(request_flights(**{
+        'depart_date': p.return_date,
+        'from_city': p.to_city,
+        'to_city': p.from_city,
+    }), end='')
+
