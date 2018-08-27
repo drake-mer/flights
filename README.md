@@ -93,3 +93,8 @@ result = jet.full_scraping(start_date)
 - Store the results into a database with the air routes
 - Store the result for the month to come on all the possible routes (30 x 12 x number of flights per day)
 - Serve this through a convenient API and scrape periodically the data to keep the infos up to date.
+
+As the scraper is written here, its only purpose it to serve the `jet.py` script, but
+this not a good endeavour. What the scrapper should really do is optimize the number of requests
+it does, storing everything in a database. Then the underlying script should query that database directly.
+That would be the cleaner process for scrapping the cityjet website.
