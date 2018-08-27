@@ -8,6 +8,28 @@ import sys
 import tempfile
 
 
+def parse_options(
+):
+    parser = argparse.ArgumentParser(description="cli arguments for jetcity")
+    parser.add_argument(
+        '--depart', dest='depart', action='store_const',
+        help='list flights at this date (YYYYMMDD format) [default=NOW + 10 days]',
+    )
+    parser.add_argument(
+        '--return', dest='return', action='store_const',
+        help='list return flights for those dates (YYYYMMDD format) [default=None]',
+    )
+    parser.add_argument(
+        '--from', dest='from_city', action='store_const',
+        help='departure city (default: London)',
+    )
+    parser.add_argument(
+        '--to', dest='to_city', action='store_const',
+        help='destination city (default: Amsterdam)',
+    )
+    return parser.parse_args()
+
+
 def launch_spider_and_stdout(spider_name, **kwargs):
     with tempfile.NamedTemporaryFile() as f:
         p = subprocess.Popen(
