@@ -1,6 +1,6 @@
 # CityJet.com Scraping
 
-The CityJet website relies heavily on javascript. 
+The CityJet website relies heavily on javascript.
 
 There is not a directly available API endpoint for fetching the data, thus
 we need to reverse engineer the way the data are fetched.
@@ -10,8 +10,8 @@ We have basically two choices:
 - use a headless browser to simulate the fetching of data (can result
   in heavy load since a lot of requests will be issued inside the browser).
 
-- use a scraping application to emulate the HTTP browser (harder but 
-  the performance load is really low and the process of refining the 
+- use a scraping application to emulate the HTTP browser (harder but
+  the performance load is really low and the process of refining the
   data is much more controlled.
 
 Let's start coding...
@@ -55,17 +55,38 @@ hence of valid arguments for the script) by doing:
 ./jet.py --routes
 ```
 
-# pricings
+# Get travel prices for a given round trip
 
 To get the available pricings for a round trip between
-London and Amsterdam, run:
+London and Amsterdam, you can run:
 
 ```
 ./jet.py --depart=YYYYMMDD --return=YYYYMMDD --from=London --to=Amsterdam
 ```
 
-If you don't provide the return date, the script assumes that you want 
+If you don't provide the return date, the script assumes that you want
 a one way ticket.
+
+# Full scraping
+
+With the following snippet, I have been able to retrieve the whole
+content of the website pricing for 30 days in a little bit less than
+30 minutes.
+
+I think that the throttling feature of scrapy is slowing down things
+on purpose, but it could be probably much more fast with the proper
+setting.
+
+The work could be speed up also by parallelizing (for example, one
+could launch a thread/process for each route, having thus approximately
+10 runners fetching the data).
+
+```python
+import datetime
+import jet
+start_date = datetime.datetime.now() + datetime.timedelta(days=5)
+result = jet.full_scraping(start_date)
+```
 
 # Possibilities for additional work
 

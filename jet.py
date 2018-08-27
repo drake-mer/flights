@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import argparse
+import datetime
+import json
 import os
 import pprint
 import shlex
@@ -35,6 +37,7 @@ def parse_options(
 
 
 def launch_spider_and_stdout(spider_name, **kwargs):
+    os.chdir(os.path.join(os.path.dirname(__file__), 'cityjet'))
     p = subprocess.Popen(
         shlex.split(
             'scrapy crawl -o {out_file_name} -t jsonlines --nolog {spider}'.format(
@@ -58,7 +61,6 @@ def request_flights(**kwargs):
 
 def airports():
     import requests
-    import json
     data = json.loads(requests.get(
         'https://www.cityjet.com/cgi-bin/eRetail/airports.json'
     ).content.decode('ascii').lstrip('function(').rstrip(');'))
@@ -69,8 +71,6 @@ def airports():
         for route in data['routes']
     ]
     return airports, travels
-
-
 
 
 AIRPORTS, ROUTES = airports()
@@ -107,13 +107,27 @@ def issue_result(
         'to_city': to_city,
     }), end='')
 
+def full_scraping(start_date, days=30):
+    output = []
+    for delta in range(0, days):
+        depart_date = start_date + datetime.timedelta(days=delta)
+        for depart, arrival in ROUTES:
+            for flight in request_flights(
+                **{
+                    'depart_date': depart_date.strftime("%Y%m%d"),
+                    'from_city': depart,
+                    'to_city': arrival,
+                }
+            ).splitlines():
+                output.append(json.loads(flight))
+    return output
+
 if __name__ == '__main__':
     p = parse_options()
     if p.routes:
         pprint.pprint(ROUTES)
         sys.exit(0)
 
-    os.chdir(os.path.join(os.path.dirname(__file__), 'cityjet'))
     issue_result(
         to_city=p.to_city, from_city=p.from_city,
         depart_date=p.depart_date, kind='DEPART'
