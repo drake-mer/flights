@@ -136,7 +136,7 @@ class CityJetSpider(scrapy.Spider):
 
 
 def _parse_data_set(data):
-    """Just parse the weird CityJet JSON."""
+    """Parse the CityJet JSON."""
     def flight_number(flight):
         # list_segment is just a correspondance
         return '+'.join(
@@ -155,10 +155,10 @@ def _parse_data_set(data):
         return departure, arrival
 
     def origin(flight):
-        return flight['list_segment'][0]['b_location']['location_name']
+        return flight['list_segment'][0]['b_location']['location_code']
 
     def destination(flight):
-        return flight['list_segment'][-1]['e_location']['location_name']
+        return flight['list_segment'][-1]['e_location']['location_code']
 
     def price(pricing):
         return pricing['list_pnr'][0]['list_pnr_price'][0]['total_amount']

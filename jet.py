@@ -40,6 +40,8 @@ def launch_spider_and_stdout(spider_name, **kwargs):
     os.chdir(os.path.join(os.path.dirname(__file__), 'cityjet'))
     p = subprocess.Popen(
         shlex.split(
+            # dont remove the jsonlines format because it will break
+            # the full_scraping function (we need a json per line)
             'scrapy crawl -o {out_file_name} -t jsonlines --nolog {spider}'.format(
                 spider=spider_name, out_file_name='-'
             ) + ''.join(
