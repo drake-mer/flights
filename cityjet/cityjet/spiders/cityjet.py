@@ -35,12 +35,8 @@ class CityJetSpider(scrapy.Spider):
             (datetime.datetime.now() + datetime.timedelta(days=10)) if not depart_date
             else datetime.datetime.strptime(depart_date, "%Y%m%d")
         )
+        self.return_date = None  # disable this option for now
         self.options = None
-        self.return_date = (
-            datetime.datetime.strptime(
-                return_date, "%Y%m%d"
-            ) if return_date else None
-        )  # This return date should never be used
 
     def start_requests(self):
         yield scrapy.Request(
