@@ -34,9 +34,6 @@ Should be enough to get started
 
 This script is well tested with scrappy 1.5 and python 3.6 under Archlinux.
 
-Try to upgrade in case of trouble.
-
-
 # Run the code
 
 A script can be found in  the base folder of the project.
@@ -49,13 +46,13 @@ You can do:
 
 For accessing the documentation.
 
-# Available Airports for the Company
+# Available routes for the company
 
-TODO: this feature is not implemented yet
+You can Get the list of available air routes (and
+hence of valid arguments for the script) by doing:
 
-Get the list of available airports by doing:
 ```
-./jet.py --airports
+./jet.py --routes
 ```
 
 # pricings
@@ -72,6 +69,6 @@ a one way ticket.
 
 # Possibilities for additional work
 
-Store the results into a database. Get the total list of the flights for
-this company on the next month and store this in a database with the
-appropriate model. Write an API to serve this, schedule the scraping jobs.
+- Store the results into a database with the air routes
+- Store the result for the month to come on all the possible routes (30 x 10 x number of flights per day)
+- Serve this through a convenient API and scrape periodically the data to keep the infos up to date.
