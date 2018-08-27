@@ -73,13 +73,13 @@ With the following snippet, I have been able to retrieve the whole
 content of the website pricing for 30 days in a little bit less than
 30 minutes.
 
-I think that the throttling feature of scrapy is slowing down things
-on purpose, but it could be probably much more fast with the proper
-setting.
+The content of the scraping is in the `september_flights.json` file
+(approximately 3000 pricings)
 
-The work could be speed up also by parallelizing (for example, one
-could launch a thread/process for each route, having thus approximately
-10 runners fetching the data).
+The work could be sped up also by parallelizing (for example, one
+could launch a thread/process for each travel route, having thus approximately
+10 runners fetching the data). In case of a parallelization, the data store
+must then be accessed in a concurrent fashion (typically, we need a database).
 
 ```python
 import datetime
