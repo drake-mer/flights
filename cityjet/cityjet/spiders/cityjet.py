@@ -21,8 +21,8 @@ class CityJetSpider(scrapy.Spider):
 
     def __init__(
         self,
-        from_city='London',
-        to_city='Amsterdam',
+        from_city=None,
+        to_city=None,
         depart_date=None,
         return_date=None,
         *args, **kwargs
@@ -86,7 +86,7 @@ class CityJetSpider(scrapy.Spider):
             ar['code']: ar for ar in data['airports']
         }
         airport_mapping = {
-            v['shortname']: k for k, v in self.airports.items()
+            v['safe_name']: k for k, v in self.airports.items()
         }
         self.options = self._fill_api_options(airport_mapping)
 
@@ -202,4 +202,3 @@ class FlightTicket(scrapy.Item):
     destination = scrapy.Field()
     pricing = scrapy.Field()
     currency = scrapy.Field()
-
