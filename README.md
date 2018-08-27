@@ -21,7 +21,25 @@ Let's start coding...
 I decided to go with Scrapy as I don't have much experience with this tool,
 so it has been really rewarding to work on this project.
 
-A running script can be found in  the `cityjet_crawler/` folder.
+# Dependencies
+
+
+Running:
+
+```bash
+pip install --user scrapy
+```
+
+Should be enough to get started
+
+This script is well tested with scrappy 1.5 and python 3.6 under Archlinux.
+
+Try to upgrade in case of trouble.
+
+
+# Run the code
+
+A script can be found in  the base folder of the project.
 
 You can do:
 
@@ -31,12 +49,16 @@ You can do:
 
 For accessing the documentation.
 
-You need to get the list of available cities for this script,
-you can have it by running:
+# Available Airports for the Company
 
+TODO: this feature is not implemented yet
+
+Get the list of available airports by doing:
 ```
 ./jet.py --airports
 ```
+
+# pricings
 
 To get the available pricings for a round trip between
 London and Amsterdam, run:
@@ -48,4 +70,8 @@ London and Amsterdam, run:
 If you don't provide the return date, the script assumes that you want 
 a one way ticket.
 
-Have fun.
+# Possibilities for additional work
+
+Store the results into a database. Get the total list of the flights for
+this company on the next month and store this in a database with the
+appropriate model. Write an API to serve this, schedule the scraping jobs.
