@@ -64,8 +64,7 @@ class CityJetSpider(scrapy.Spider):
     def _submit_second_form(self, response):
         yield scrapy.http.FormRequest.from_response(
             response,
-            formxpath='//form['
-                '@action="'
+            formxpath='//form[@action="'
                 'https://book.cityjet.com/plnext/CityJetairlines/Override.action'
             '"]',
             callback=self._parse_available_flights
@@ -87,7 +86,7 @@ class CityJetSpider(scrapy.Spider):
             ar['code']: ar for ar in data['airports']
         }
         airport_mapping = {
-            v['shortname']: k  for k, v in self.airports.items()
+            v['shortname']: k for k, v in self.airports.items()
         }
         self.options = self._fill_api_options(airport_mapping)
 
@@ -203,5 +202,4 @@ class FlightTicket(scrapy.Item):
     destination = scrapy.Field()
     pricing = scrapy.Field()
     currency = scrapy.Field()
-
 

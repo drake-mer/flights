@@ -5,7 +5,6 @@ import os
 import shlex
 import subprocess
 import sys
-import tempfile
 
 
 def parse_options(
@@ -31,29 +30,25 @@ def parse_options(
 
 
 def launch_spider_and_stdout(spider_name, **kwargs):
-    with tempfile.NamedTemporaryFile() as f:
-        p = subprocess.Popen(
-            shlex.split(
-                'scrapy crawl -o {out_file_name} -t jsonlines --nolog {spider}'.format(
-                    spider=spider_name, out_file_name='-'
-                ) + ''.join(
-                    ' -a {key}={value}'.format(key=key, value=value)
-                    for key, value in kwargs.items() if value
-                )
-            ),
-            stdout=subprocess.PIPE
-        )
-        stdout, stderr = p.communicate()
-        if stderr:
-            print(stderr.decode, file=sys.stderr)
-        return stdout.decode()
-
-
-show_flights = lambda date: launch_spider_and_stdout('cityjet', date=date)
+    p = subprocess.Popen(
+        shlex.split(
+            'scrapy crawl -o {out_file_name} -t jsonlines --nolog {spider}'.format(
+                spider=spider_name, out_file_name='-'
+            ) + ''.join(
+                ' -a {key}={value}'.format(key=key, value=value)
+                for key, value in kwargs.items() if value
+            )
+        ),
+        stdout=subprocess.PIPE
+    )
+    stdout, stderr = p.communicate()
+    if stderr:
+        print(stderr.decode, file=sys.stderr)
+    return stdout.decode()
 
 
 def request_flights(**kwargs):
-     return launch_spider_and_stdout('cityjet', **kwargs)
+    return launch_spider_and_stdout('cityjet', **kwargs)
 
 
 if __name__ == '__main__':
@@ -73,4 +68,3 @@ if __name__ == '__main__':
         'from_city': p.to_city,
         'to_city': p.from_city,
     }), end='')
-
