@@ -82,9 +82,9 @@ def check_dest(origin, destination):
         AIRPORTS[code]['safe_name']: code for code in AIRPORTS
     }
     if origin not in code_map:
-        return '{} is not a valid origin', False
+        return '{} is not a valid origin'.format(origin), False
     elif destination not in code_map:
-        return '{} is not a valid destination', False
+        return '{} is not a valid destination'.format(destination), False
     elif (origin, destination) not in ROUTES:
         return 'No flight between {} and {}'.format(origin, destinatio), False
     else:
