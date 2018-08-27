@@ -77,6 +77,7 @@ def airports():
 
 AIRPORTS, ROUTES = airports()
 
+
 def check_dest(origin, destination):
     code_map = {
         AIRPORTS[code]['safe_name']: code for code in AIRPORTS
@@ -109,6 +110,7 @@ def issue_result(
         'to_city': to_city,
     }), end='')
 
+
 def full_scraping(start_date, days=30):
     output = []
     for delta in range(0, days):
@@ -123,6 +125,7 @@ def full_scraping(start_date, days=30):
             ).splitlines():
                 output.append(json.loads(flight))
     return output
+
 
 if __name__ == '__main__':
     p = parse_options()

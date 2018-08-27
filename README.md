@@ -91,5 +91,5 @@ result = jet.full_scraping(start_date)
 # Possibilities for additional work
 
 - Store the results into a database with the air routes
-- Store the result for the month to come on all the possible routes (30 x 10 x number of flights per day)
+- Store the result for the month to come on all the possible routes (30 x 12 x number of flights per day)
 - Serve this through a convenient API and scrape periodically the data to keep the infos up to date.
